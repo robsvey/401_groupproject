@@ -1,0 +1,77 @@
+---
+title: "BYU Trip Share ERD  |  Riders (USERS) and TRIPS are many-to-many, resolved by the SEAT_REQUESTS bridge table"
+---
+erDiagram
+    USERS ||--o| ID_VERIFICATIONS : "submits (one-to-one)"
+    USERS ||--o{ TRIPS : "drives / posts (one-to-many)"
+    DESTINATIONS ||--o{ TRIPS : "is destination of (one-to-many)"
+    USERS ||--o{ SEAT_REQUESTS : "requests as rider (one-to-many)"
+    TRIPS ||--o{ SEAT_REQUESTS : "receives (one-to-many)"
+    TRIPS ||--o{ CHAT_MESSAGES : "has group chat of (one-to-many)"
+    USERS ||--o{ CHAT_MESSAGES : "sends (one-to-many)"
+
+    USERS {
+        int user_id PK
+        varchar username UK
+        varchar first_name
+        varchar last_name
+        varchar byu_email UK
+        varchar phone_number
+        date date_of_birth
+        varchar password_hash
+        text profile_photo_url
+        varchar hometown_city
+        varchar hometown_state
+        boolean location_access_granted
+        timestamptz created_at
+    }
+    ID_VERIFICATIONS {
+        int verification_id PK
+        int user_id FK,UK
+        varchar document_type "byu_student_id or drivers_license"
+        text document_image_url
+        varchar status "pending, verified, rejected"
+        timestamptz submitted_at
+        timestamptz reviewed_at
+    }
+    DESTINATIONS {
+        int destination_id PK
+        varchar destination_name
+        varchar city
+        varchar state
+        varchar category "Ski trip, National park, ..."
+        text photo_url
+        int est_drive_minutes
+        numeric est_price_per_rider
+    }
+    TRIPS {
+        int trip_id PK
+        int driver_id FK "references USERS"
+        int destination_id FK
+        varchar departure_location
+        timestamptz departure_time
+        timestamptz return_time
+        int total_seats
+        int seats_available
+        numeric price_per_seat
+        text trip_notes
+        varchar trip_status "open, full, cancelled, completed"
+        timestamptz created_at
+    }
+    SEAT_REQUESTS {
+        int request_id PK
+        int trip_id FK
+        int rider_id FK "references USERS"
+        int seats_requested
+        varchar request_message
+        varchar request_status "pending, accepted, denied, cancelled"
+        timestamptz requested_at
+        timestamptz responded_at
+    }
+    CHAT_MESSAGES {
+        int message_id PK
+        int trip_id FK
+        int sender_id FK "references USERS"
+        varchar message_body "max 1,000 characters"
+        timestamptz sent_at
+    }

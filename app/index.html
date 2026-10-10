@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BYU Trip Share</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">⛰</span>
+      <div>
+        <h1>BYU Trip Share</h1>
+        <p class="tagline">Split the drive with other Cougars</p>
+      </div>
+    </div>
+    <label class="rider-picker">
+      <span>Signed in as <em>(demo)</em></span>
+      <select id="riderSelect" aria-label="Choose which sample rider you are"></select>
+    </label>
+  </header>
+
+  <main>
+    <div class="section-head">
+      <h2>Upcoming trips</h2>
+      <p class="hint">Request a seat, then refresh the page. Your request is saved in the database, so it stays.</p>
+    </div>
+
+    <div id="banner" class="banner" hidden></div>
+    <div id="trips" class="trip-grid" aria-live="polite">
+      <p class="loading">Loading trips…</p>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <!-- Supabase JS client (pinned version) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <!-- Your keys live in config.js, which is git-ignored. Copy config.example.js to create it. -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
